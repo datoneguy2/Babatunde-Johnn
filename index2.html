@@ -221,6 +221,49 @@
   font-weight: bold;
 }
 
+/* General responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive text scaling */
+h1, h2, h3, p {
+  word-wrap: break-word;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  p { font-size: 1rem; }
+
+  .profile-img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .projects {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .project {
+    max-width: 100%;
+  }
+
+  .contact-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .contact-btn {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    line-height: 60px;
+  }
+}
 
     /* Contact Icons */
     .icon { width: 20px; vertical-align: middle; margin-right: 8px; }
