@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>John Babatunde | Portfolio</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" type="image/png" href="john.jpg">
+  <link rel="stylesheet" href="css/all.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    /* ---------- Theme variables ---------- */
+    body {
+      --accent: #0b93ee;
+      --accent2: #7c4dff;
+      --head-font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-size: clamp(1rem, 0.94rem + 0.3vw, 1.15rem);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
+    body.light {
+      --bg: #f2f5fb; --text: #1b1f2a; --muted: #566074;
+      --card: rgba(255,255,255,0.7); --border: rgba(20,30,60,0.08);
+      --shadow: 0 10px 35px rgba(30,50,110,0.12);
+      background: var(--bg); color: var(--text);
+    }
+    body.dark {
+      --bg: #0a0c13; --text: #f2f4fa; --muted: #a7b0c4;
+      --card: rgba(255,255,255,0.06); --border: rgba(255,255,255,0.12);
+      --shadow: 0 10px 40px rgba(0,0,0,0.5);
+      background: var(--bg); color: var(--text);
+    }
+    ::selection { background: var(--accent); color: #fff; }
+
+    /* ---------- Background layers ---------- */
+    #particles { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; }
+    .blob {
+      position: fixed; z-index: -2; border-radius: 50%;
+      filter: blur(80px); opacity: 0.35; pointer-events: none;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .blob.one { width: 40vmax; height: 40vmax; background: var(--accent); top: -12vmax; left: -12vmax; }
+    .blob.two { width: 35vmax; height: 35vmax; background: var(--accent2); bottom: -10vmax; right: -10vmax; animation-delay: -9s; }
+    @keyframes drift { to { transform: translate(6vw, 5vh) scale(1.15); } }
+
+    /* ---------- Scroll progress ---------- */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 4px; width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      z-index: 2000;
+    }
+
+    /* ---------- Theme toggle ---------- */
+    #theme-toggle {
+      position: fixed; top: 16px; right: 16px; z-index: 1500;
+      width: 46px; height: 46px; border-radius: 50%;
+      border: 1px solid var(--border); cursor: pointer;
+      background: var(--card); color: inherit; font-size: 1.1rem;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    #theme-toggle:hover { transform: rotate(20deg) scale(1.1); box-shadow: 0 0 20px var(--accent); }
+
+    /* ---------- Layout ---------- */
+    main { width: 100%; padding: 0 clamp(12px, 4vw, 24px); }
+    .card {
+      width: 100%; max-width: 860px;
+      margin: clamp(16px, 4vw, 30px) auto;
+      padding: clamp(20px, 4vw, 36px) clamp(16px, 4vw, 32px);
+      border-radius: 20px; text-align: center;
+      background: var(--card); border: 1px solid var(--border);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      transition: transform 0.35s, box-shadow 0.35s, border-color 0.35s;
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--accent); }
+
+    .section-title {
+      display: inline-block; max-width: 100%;
+      font-family: var(--head-font); font-weight: 800;
+      font-size: clamp(1.25rem, 1rem + 1.6vw, 2rem);
+      line-height: 1.25; padding: 10px 22px; margin-bottom: 22px;
+      border-radius: 14px; background: var(--card);
+      border: 1px solid var(--border); box-shadow: var(--shadow);
+      overflow-wrap: anywhere;
+    }
+    h3 { font-family: var(--head-font); font-size: clamp(1rem, 0.9rem + 0.6vw, 1.2rem); font-weight: 600; color: var(--muted); margin-bottom: 12px; }
+    p, span, h1, h2, h3 { overflow-wrap: anywhere; }
+    img { max-width: 100%; height: auto; display: block; }
+
+    /* ---------- Hero ---------- */
+    .hero { display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: clamp(40px, 8vw, 56px); }
+    .profile-img {
+      width: clamp(96px, 22vw, 130px); height: clamp(96px, 22vw, 130px);
+      border-radius: 50%; object-fit: cover;
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 0 6px rgba(11,147,238,0.15), 0 0 30px rgba(11,147,238,0.5);
+      animation: pulse 3s ease-in-out infinite;
+    }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 12px rgba(11,147,238,0.08), 0 0 45px rgba(124,77,255,0.6); } }
+    .hero h1 {
+      font-family: var(--head-font); font-weight: 800;
+      font-size: clamp(1.8rem, 1.2rem + 3.5vw, 3.2rem); line-height: 1.15;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent));
+      background-size: 200% auto; -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; animation: shine 6s linear infinite;
+    }
+    @keyframes shine { to { background-position: 200% center; } }
+    .role { font-family: var(--head-font); font-weight: 600; font-size: clamp(1rem, 0.9rem + 0.8vw, 1.35rem); color: var(--accent); min-height: 1.6em; }
+    .role::after { content: "|"; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .intro { max-width: 600px; font-size: clamp(1rem, 0.95rem + 0.5vw, 1.25rem); }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-block; padding: 12px 26px; margin-top: 14px;
+      font-family: var(--head-font); font-weight: 700;
+      font-size: clamp(0.95rem, 0.9rem + 0.3vw, 1.1rem);
+      text-decoration: none; color: #fff; border-radius: 50px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 6px 18px rgba(11,147,238,0.35);
+      transition: transform 0.25s, box-shadow 0.25s, filter 0.25s;
+    }
+    .btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 10px 28px rgba(124,77,255,0.5); filter: brightness(1.1); }
+    .btn.sm { padding: 9px 20px; font-size: 0.95rem; }
+
+    /* ---------- Projects ---------- */
+    .projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 24px; justify-items: center; }
+    .project { width: 100%; max-width: 320px; text-align: center; }
+    .project .thumb { display: block; overflow: hidden; border-radius: 14px; margin-bottom: 12px; box-shadow: var(--shadow); }
+    .project img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: rgba(128,128,128,0.2); transition: transform 0.5s; }
+    .project .thumb:hover img { transform: scale(1.1) rotate(1deg); }
+    .project p { font-family: var(--head-font); font-weight: 700; font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem); margin-bottom: 4px; }
+
+    /* ---------- Skill rows ---------- */
+    .skill-row {
+      display: flex; align-items: center; gap: 16px; text-align: left;
+      padding: 10px 14px; margin: 10px 0; border-radius: 14px;
+      border: 1px solid transparent; transition: background 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .skill-row:hover { background: rgba(11,147,238,0.1); border-color: var(--accent); transform: translateX(6px); }
+    .skill-row .icon { flex: 0 0 auto; width: clamp(40px, 10vw, 54px); height: clamp(40px, 10vw, 54px); object-fit: cover; border-radius: 12px; }
+    .skill-row span { font-family: var(--head-font); font-weight: 700; font-size: clamp(1rem, 0.92rem + 0.5vw, 1.25rem); }
+
+    /* ---------- Skill bars ---------- */
+    .skill-bar { margin: 16px 0; text-align: left; }
+    .skill-bar p { display: flex; justify-content: space-between; font-family: var(--head-font); font-weight: 700; margin-bottom: 6px; font-size: clamp(0.95rem, 0.9rem + 0.3vw, 1.1rem); }
+    .bar { width: 100%; height: 14px; background: rgba(128,128,128,0.25); border-radius: 8px; overflow: hidden; }
+    .fill { height: 100%; width: 0; border-radius: 8px; transition: width 1.6s cubic-bezier(.2,.8,.2,1);
+      background-image: linear-gradient(90deg, rgba(255,255,255,0.25), transparent); background-blend-mode: overlay; }
+    .active .fill { width: var(--w); }
+    .fill.html { --w: 98%; background-color: #e34c26; }
+    .fill.css { --w: 90%; background-color: #264de4; }
+    .fill.js { --w: 70%; background-color: #f0db4f; }
+    .fill.git { --w: 90%; background-color: #f34f29; }
+    .fill.next { --w: 50%; background-color: #007bff; }
+
+    /* ---------- Contact ---------- */
+    .contact-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 26px 16px; margin-top: 20px; }
+    .contact-item { display: flex; flex-direction: column; align-items: center; }
+    .contact-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: clamp(56px, 14vw, 70px); height: clamp(56px, 14vw, 70px);
+      border-radius: 50%; color: #fff; text-decoration: none;
+      font-size: clamp(1.3rem, 1.1rem + 1vw, 1.8rem);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 6px 18px rgba(11,147,238,0.35);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .contact-btn:hover { transform: translateY(-6px) rotate(8deg) scale(1.1); box-shadow: 0 12px 28px rgba(124,77,255,0.55); }
+    .contact-item p { margin-top: 10px; font-family: var(--head-font); font-weight: 700; font-size: clamp(0.85rem, 0.8rem + 0.3vw, 1rem); }
+
+    footer { text-align: center; padding: 20px 16px 40px; color: var(--muted); font-size: 0.95rem; }
+
+    /* ---------- Back to top ---------- */
+    #top {
+      position: fixed; right: 16px; bottom: 20px; z-index: 1500;
+      width: 46px; height: 46px; border-radius: 50%; border: none; cursor: pointer;
+      color: #fff; font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: var(--shadow); opacity: 0; transform: translateY(20px); pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    #top.show { opacity: 1; transform: none; pointer-events: auto; }
+
+    /* ---------- Reveal ---------- */
+    .reveal { opacity: 0; transform: translateY(50px); transition: opacity 0.8s ease, transform 0.8s ease, border-color 0.35s, box-shadow 0.35s; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .reveal.active:hover { transform: translateY(-4px); }
+
+    /* ---------- Small screens ---------- */
+    @media (max-width: 480px) {
+      .skill-row:hover { transform: none; }
+      .section-title { padding: 8px 14px; }
+      .btn { width: 100%; text-align: center; }
+      .btn.sm { width: auto; }
+    }
+    @media (hover: none) { .card:hover, .reveal.active:hover { transform: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body class="light">
+  <div id="progress"></div>
+  <div class="blob one"></div>
+  <div class="blob two"></div>
+
+  <!-- Particle Background -->
+  <canvas id="particles"></canvas>
+
+  <!-- Theme Toggle -->
+  <button id="theme-toggle" aria-label="Toggle dark and light theme" title="Toggle theme"><i class="fas fa-moon"></i></button>
+
+  <main>
+    <!-- Hero Section -->
+    <header class="card reveal hero">
+      <img src="john.jpg" alt="John Babatunde" class="profile-img">
+      <h1>John Babatunde</h1>
+      <div class="role" id="role"></div>
+      <p class="intro">Hey there 👋, I'm <b>John.</b> A Motivated Frontend Developer, actively seeking opportunities to contribute and grow in a dynamic team environment.</p>
+    </header>
+
+    <!-- Projects -->
+    <section class="card reveal">
+      <h2 class="section-title">Projects I've Worked on 💪</h2>
+      <div class="projects">
+        <div class="project">
+          <a href="project1.html" class="thumb"><img src="cil.jpg" alt="Project 1" loading="lazy"></a>
+          <p>A Solar Website - Collaborative Project</p>
+          <a href="project1.html" class="btn sm">Preview Site</a>
+        </div>
+        <div class="project">
+          <a href="project2.html" class="thumb"><img src="nexus.jpg" alt="Project 2" loading="lazy"></a>
+          <p>A Cat-Fish Farming Website</p>
+          <a href="https://i-can-nexus2.netlify.app/" class="btn sm">Preview Site</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Languages -->
+    <section class="card reveal">
+      <h2 class="section-title">Languages I'm Familiar With 💻</h2>
+      <div class="skill-row"><img src="html.jpg" alt="HTML" class="icon"><span>HTML5</span></div>
+      <div class="skill-row"><img src="css3.jpg" alt="CSS" class="icon"><span>CSS3</span></div>
+      <div class="skill-row"><img src="js.jpg" alt="JavaScript" class="icon"><span>JavaScript (ES6+)</span></div>
+      <div class="skill-row"><img src="bs.jpg" alt="Bootstrap" class="icon"><span>Bootstrap</span></div>
+      <div class="skill-row"><img src="next.jpg" alt="Next.js" class="icon"><span>Next.Js</span></div>
+    </section>
+
+    <!-- Software -->
+    <section class="card reveal">
+      <h2 class="section-title">Softwares I use for my projects 🚀</h2>
+      <div class="skill-row"><img src="git.jpg" alt="Git" class="icon"><span>GitHub, WordPress, Bash scripting, SSL &amp; Google Search Console</span></div>
+      <div class="skill-row"><img src="mobile.jpg" alt="Accessibility" class="icon"><span>Mobile Simulators &amp; Responsive layouts</span></div>
+    </section>
+
+    <!-- Proficiency -->
+    <section class="card reveal">
+      <h2 class="section-title">How Proficient am i ? 🤔</h2>
+      <div class="skill-bar"><p>HTML <small>98%</small></p><div class="bar"><div class="fill html"></div></div></div>
+      <div class="skill-bar"><p>CSS <small>90%</small></p><div class="bar"><div class="fill css"></div></div></div>
+      <div class="skill-bar"><p>JavaScript <small>70%</small></p><div class="bar"><div class="fill js"></div></div></div>
+      <div class="skill-bar"><p>Bootstrap <small>90%</small></p><div class="bar"><div class="fill git"></div></div></div>
+      <div class="skill-bar"><p>Next.js <small>50%</small></p><div class="bar"><div class="fill next"></div></div></div>
+    </section>
+
+    <!-- Resume -->
+    <section class="card reveal">
+      <h2 class="section-title">Check out my Resume👇</h2>
+      <div><a href="Resume.pdf" download class="btn">Download My Resume</a></div>
+    </section>
+
+    <!-- Quick link -->
+    <section class="card reveal">
+      <h2 class="section-title">Quick Link 🔗</h2>
+      <h3>Find me here on Linktree</h3>
+      <a href="https://" class="btn">༒ Ðáť-kîð-Jøhň ༒</a>
+    </section>
+
+    <!-- Contact -->
+    <section class="card reveal">
+      <h2 class="section-title">Contact Me🤙</h2>
+      <h3>If you have an idea in mind or want us to team together or freelance, feel free to reach out to me</h3>
+      <div class="contact-row">
+        <div class="contact-item">
+          <a href="mailto:starkjohn686@gmail.com" class="contact-btn" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+          <p>starkjohn686@gmail.com</p>
+        </div>
+        <div class="contact-item">
+          <a href="tel:07041019259" class="contact-btn" aria-label="Phone"><i class="fa-solid fa-phone"></i></a>
+          <p>0704 101 9259</p>
+        </div>
+        <div class="contact-item">
+          <a href="https://github.com/datoneguy2" target="_blank" rel="noopener" class="contact-btn" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+          <p>GitHub</p>
+        </div>
+        <div class="contact-item">
+          <a href="" target="_blank" rel="noopener" class="contact-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          <p>LinkedIn</p>
+        </div>
+        <div class="contact-item">
+          <a href="https://x.com/HeisJonn" target="_blank" rel="noopener" class="contact-btn" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+          <p>X (Twitter)</p>
+        </div>
+        <div class="contact-item">
+          <a href="https://t.me/DatKidJohn" target="_blank" rel="noopener" class="contact-btn" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+          <p>Telegram</p>
+        </div>
+        <div class="contact-item">
+          <a href="https://wa.me/2347041019259" target="_blank" rel="noopener" class="contact-btn" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          <p>WhatsApp</p>
+        </div>
+        <div class="contact-item">
+          <a href="" target="_blank" rel="noopener" class="contact-btn" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <p>Facebook</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><p>© 2026 John Babatunde 🔒</p></footer>
+
+  <button id="top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+  <script>
+    // ---------- Theme Toggle (remembers choice) ----------
+    const toggleBtn = document.getElementById("theme-toggle");
+    const icon = toggleBtn.querySelector("i");
+    let darkMode = false;
+
+    function applyTheme(dark) {
+      darkMode = dark;
+      document.body.classList.toggle("dark", dark);
+      document.body.classList.toggle("light", !dark);
+      icon.className = dark ? "fas fa-sun" : "fas fa-moon";
+      try { localStorage.setItem("theme", dark ? "dark" : "light"); } catch (e) {}
+    }
+    try { if (localStorage.getItem("theme") === "dark") applyTheme(true); } catch (e) {}
+    toggleBtn.addEventListener("click", () => applyTheme(!darkMode));
+
+    // ---------- Reveal on scroll (also animates skill bars) ----------
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("active"); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+    // ---------- Typing effect ----------
+    const roles = ["Frontend Developer", "Responsive Web Designer", "Problem Solver", "Always Learning 🚀"];
+    const roleEl = document.getElementById("role");
+    let ri = 0, ci = 0, deleting = false;
+    function type() {
+      const word = roles[ri];
+      roleEl.textContent = word.slice(0, ci);
+      if (!deleting && ci === word.length) { deleting = true; return setTimeout(type, 1500); }
+      if (deleting && ci === 0) { deleting = false; ri = (ri + 1) % roles.length; }
+      ci += deleting ? -1 : 1;
+      setTimeout(type, deleting ? 40 : 90);
+    }
+    type();
+
+    // ---------- Scroll progress + back-to-top ----------
+    const progress = document.getElementById("progress");
+    const topBtn = document.getElementById("top");
+    window.addEventListener("scroll", () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + "%";
+      topBtn.classList.toggle("show", window.scrollY > 400);
+    }, { passive: true });
+    topBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+    // ---------- Particle Background ----------
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    let particlesArray = [];
+    const mouse = { x: null, y: null };
+    const linkDist = () => (window.innerWidth < 600 ? 90 : 120);
+
+    function sizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    class Particle {
+      constructor(x, y) {
+        this.x = x; this.y = y;
+        this.size = Math.random() * 2 + 2;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * 2 - 1;
+      }
+      update() {
+        this.x += this.speedX; this.y += this.speedY;
+        if (this.x < 0 || this.x > window.innerWidth) this.speedX *= -1;
+        if (this.y < 0 || this.y > window.innerHeight) this.speedY *= -1;
+      }
+      draw() {
+        ctx.fillStyle = darkMode ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      sizeCanvas();
+      // fewer dots on small screens so phones stay smooth
+      const count = Math.min(90, Math.max(25, Math.floor((window.innerWidth * window.innerHeight) / 14000)));
+      particlesArray = [];
+      for (let i = 0; i < count; i++) {
+        particlesArray.push(new Particle(Math.random() * window.innerWidth, Math.random() * window.innerHeight));
+      }
+    }
+
+    function line(x1, y1, x2, y2, alpha) {
+      ctx.strokeStyle = darkMode ? `rgba(255,255,255,${alpha})` : `rgba(0,0,0,${alpha})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    }
+
+    function connect() {
+      const max = linkDist();
+      for (let a = 0; a < particlesArray.length; a++) {
+        const p = particlesArray[a];
+        for (let b = a + 1; b < particlesArray.length; b++) {
+          const q = particlesArray[b];
+          const d = Math.hypot(p.x - q.x, p.y - q.y);
+          if (d < max) line(p.x, p.y, q.x, q.y, 0.2);
+        }
+        if (mouse.x !== null) {
+          const d = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+          if (d < 150) line(p.x, p.y, mouse.x, mouse.y, 0.45);
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      particlesArray.forEach(p => { p.update(); p.draw(); });
+      connect();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener("mouseout", () => { mouse.x = mouse.y = null; });
+    window.addEventListener("touchmove", e => { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }, { passive: true });
+    window.addEventListener("touchend", () => { mouse.x = mouse.y = null; });
+
+    let resizeTimer;
+    window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(init, 150); });
+
+    init();
+    animate();
+  </script>
+</body>
+</html>
